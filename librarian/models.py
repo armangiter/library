@@ -10,7 +10,7 @@ class Book(BaseModel):
     isbn = models.CharField(max_length=50, verbose_name='ISBN', help_text='International Standard Book Number')
     author = models.CharField(max_length=50, blank=True, null=True)
     publisher = models.CharField(max_length=50, blank=True, null=True)
-    inventory = models.IntegerField(default=0)
+    inventory = models.PositiveSmallIntegerField(default=0)
 
 
 class Barrow(BaseModel):
