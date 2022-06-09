@@ -17,4 +17,5 @@ class Barrow(BaseModel):
     book = models.ForeignKey(to=Book, on_delete=models.PROTECT, related_name='Barrows')
     member = models.ForeignKey(to=Member, on_delete=models.PROTECT, related_name='Barrows')
     barrow_date = models.DateField(default=timezone.now)
+    barrow_time = models.DurationField()
     return_date = models.DateField()
