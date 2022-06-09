@@ -6,6 +6,8 @@ from django.utils import timezone
 class Book(BaseModel):
     name = models.CharField(max_length=50)
     isbn = models.CharField(max_length=50, verbose_name='ISBN', help_text='International Standard Book Number')
+    author = models.CharField(max_length=50, blank=True, null=True)
+    publisher = models.CharField(max_length=50, blank=True, null=True)
     inventory = models.IntegerField(default=0)
 
 
