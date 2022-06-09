@@ -34,7 +34,7 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-    def deleter(self):
+    def delete(self, using=None, keep_parents=False):
         self.deleted_at = timezone.now()
         self.is_deleted = True
         self.save()
