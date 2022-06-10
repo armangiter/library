@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     # apps
     'accounts',
     'librarian',
+
+    # packages
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
