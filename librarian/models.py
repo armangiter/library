@@ -19,6 +19,10 @@ class Book(BaseModel):
             return True
         return False
 
+    def add_inventory(self, amount=1):
+        self.inventory += amount
+        self.save()
+
 
 class Barrow(BaseModel):
     book = models.ForeignKey(to=Book, on_delete=models.PROTECT, related_name='Barrows')
