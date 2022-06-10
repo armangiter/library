@@ -23,7 +23,7 @@ class BarrowSystemTest(TestCase):
         book1 = self.book_1.subtract_inventory(amount=6)
         book2 = self.book_2.add_inventory()
         self.assertEqual(book1, False, 'method subtract_inventory in book model is not working correctly')
-        self.assertEqual(book2, True, 'method add_inventory in book model is not working correctly')
+        self.assertEqual(self.book_2.inventory, 3, 'method add_inventory in book model is not working correctly')
         self.assertEqual(book3, True, 'method subtract_inventory in book model is not working correctly')
         self.assertEqual(book4, False, 'method subtract_inventory in book model is not working correctly')
 
