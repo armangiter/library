@@ -1,20 +1,21 @@
 from django.test import TestCase
-
 from accounts.models import Member
-from .models import Barrow, Book
+from .models import Barrow, Book, Author, Publisher
 
 
 class BarrowSystemTest(TestCase):
 
     def setUp(self) -> None:
+        self.author = Author.objects.create()
         self.member1 = Member.objects.create(username='member1', role='member', password='member12334')
-        self.book_1 = Book.objects.create(name='book1', isbn='isbn1', author='author1', publisher='publisher1',
+        self.publisher = Publisher.objects.create()
+        self.book_1 = Book.objects.create(name='book1', isbn='isbn1', author=self.author, publisher=self.publisher,
                                           inventory=5)
-        self.book_2 = Book.objects.create(name='book2', isbn='isbn2', author='author2', publisher='publisher2',
+        self.book_2 = Book.objects.create(name='book2', isbn='isbn2', author=self.author, publisher=self.publisher,
                                           inventory=2)
-        self.book_3 = Book.objects.create(name='book3', isbn='isbn3', author='author3', publisher='publisher3',
+        self.book_3 = Book.objects.create(name='book3', isbn='isbn3', author=self.author, publisher=self.publisher,
                                           inventory=1)
-        self.book_4 = Book.objects.create(name='book4', isbn='isbn4', author='author4', publisher='publisher4',
+        self.book_4 = Book.objects.create(name='book4', isbn='isbn4', author=self.author, publisher=self.publisher,
                                           inventory=0)
 
     def test_book_inventory_method(self):
