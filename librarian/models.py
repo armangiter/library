@@ -7,8 +7,8 @@ from django.utils import timezone
 class Book(BaseModel):
     name = models.CharField(max_length=50)
     isbn = models.CharField(max_length=50, verbose_name='ISBN', help_text='International Standard Book Number')
-    author = models.ForeignKey(to='Author', on_delete=models.SET_NULL, null=True)
-    publisher = models.ForeignKey(to='Publisher', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(to='Author', on_delete=models.SET_NULL, null=True, blank=True)
+    publisher = models.ForeignKey(to='Publisher', on_delete=models.SET_NULL, null=True, blank=True)
     inventory = models.PositiveSmallIntegerField(default=0)
 
     def subtract_inventory(self, amount=1):
