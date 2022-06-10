@@ -1,5 +1,4 @@
 from django.db import models
-
 from accounts.models import Member
 from core.models import BaseModel
 from django.utils import timezone
@@ -8,7 +7,7 @@ from django.utils import timezone
 class Book(BaseModel):
     name = models.CharField(max_length=50)
     isbn = models.CharField(max_length=50, verbose_name='ISBN', help_text='International Standard Book Number')
-    author = models.CharField(max_length=50, blank=True, null=True)
+    author = models.ForeignKey(to='Author', on_delete=models.SET_NULL, null=True)
     publisher = models.CharField(max_length=50, blank=True, null=True)
     inventory = models.PositiveSmallIntegerField(default=0)
 
@@ -36,3 +35,11 @@ class Barrow(BaseModel):
         if self.book.subtract_inventory():
             self.return_date = self.barrow_date + self.barrow_time
             super(Barrow, self).save(force_insert=False, force_update=False, using=None, update_fields=None)
+
+
+class Author(BaseModel):
+    first_name = models.CharField(max_length=50, default='author')
+    last_name = models.CharField(max_length=50, default='author')
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
