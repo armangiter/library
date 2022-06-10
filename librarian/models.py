@@ -12,6 +12,13 @@ class Book(BaseModel):
     publisher = models.CharField(max_length=50, blank=True, null=True)
     inventory = models.PositiveSmallIntegerField(default=0)
 
+    def subtract_inventory(self, amount=1):
+        self.inventory -= amount
+        if self.inventory >= 0:
+            self.save()
+            return True
+        return False
+
 
 class Barrow(BaseModel):
     book = models.ForeignKey(to=Book, on_delete=models.PROTECT, related_name='Barrows')
