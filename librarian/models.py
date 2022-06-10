@@ -8,7 +8,7 @@ class Book(BaseModel):
     name = models.CharField(max_length=50)
     isbn = models.CharField(max_length=50, verbose_name='ISBN', help_text='International Standard Book Number')
     author = models.ForeignKey(to='Author', on_delete=models.SET_NULL, null=True)
-    publisher = models.CharField(max_length=50, blank=True, null=True)
+    publisher = models.ForeignKey(to='Publisher', on_delete=models.SET_NULL, null=True)
     inventory = models.PositiveSmallIntegerField(default=0)
 
     def subtract_inventory(self, amount=1):
@@ -43,3 +43,7 @@ class Author(BaseModel):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
+
+class Publisher(BaseModel):
+    name = models.CharField(max_length=150)
