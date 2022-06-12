@@ -22,6 +22,9 @@ class Book(BaseModel):
         self.inventory += amount
         self.save()
 
+    def __str__(self):
+        return f'{self.name} {self.author}, {self.publisher}'
+
 
 class Barrow(BaseModel):
     book = models.ForeignKey(to=Book, on_delete=models.PROTECT, related_name='Barrows')
@@ -29,6 +32,9 @@ class Barrow(BaseModel):
     barrow_date = models.DateTimeField(default=timezone.now)
     barrow_time = models.DurationField(default=timezone.timedelta(days=7))
     return_date = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.book} >> {self.member}'
 
 
 class Author(BaseModel):
@@ -41,3 +47,7 @@ class Author(BaseModel):
 
 class Publisher(BaseModel):
     name = models.CharField(max_length=150)
+
+    def __str__(self):
+        return f'{self.name}'
+
