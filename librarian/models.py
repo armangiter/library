@@ -30,12 +30,6 @@ class Barrow(BaseModel):
     barrow_time = models.DurationField(default=timezone.timedelta(days=7))
     return_date = models.DateTimeField(null=True, blank=True)
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None
-             ):
-        if self.book.subtract_inventory():
-            self.return_date = self.barrow_date + self.barrow_time
-            super(Barrow, self).save(force_insert=False, force_update=False, using=None, update_fields=None)
-
 
 class Author(BaseModel):
     first_name = models.CharField(max_length=50, default='author')
