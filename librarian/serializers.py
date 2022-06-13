@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from rest_framework.generics import get_object_or_404
-
+from rest_framework.exceptions import ValidationError
 from .models import Book, BarrowAction
-from django.db import transaction
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -11,14 +9,22 @@ class BookSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'inventory', 'publisher', 'author')
 
 
-class BarrowSerializer(serializers.ModelSerializer):
+class BarrowActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = BarrowAction
-        fields = ('id', 'book', 'member', 'barrow_date', 'barrow_days', 'return_date', 'barrow_type')
+        fields = ('id', 'book', 'member', 'action_date', 'barrow_days', 'get_action_type_display', 'action_type')
+        extra_kwargs = {
+            'action_type': {'write_only': True},
+            'get_action_type_display': {'read_only': True}
+        }
+
+    def validated_action_type(self):
+        if self.initial_data['action_type'] in [1, 2, 3]:
+            return self.initial_data['action_type']
+        raise ValidationError('this field must be one of this {1, 2, 3}')
 
     def create(self, validated_data):
-        with transaction.atomic():
-            _book = validated_data['book']
-            if _book.subtract_inventory():
-                barrow = BarrowAction.objects.create(**validated_data)
-        return barrow
+        _ = validated_data.pop('action_type')
+        action = BarrowAction.action_switcher(_)
+        instance = action(**validated_data)
+        return instance

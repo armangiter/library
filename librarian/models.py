@@ -59,24 +59,32 @@ class BarrowAction(BaseModel):
         return f'{self.book} >> {self.member}'
 
     @classmethod
-    def barrow_book(cls, book, member, action_date, barrow_days):
+    def barrow_book(cls, **kwargs):
+        book = kwargs['book']
         book_balance = Book.get_book_balance(book)
         if book.inventory - book_balance['in_use'] > 0:
-            instance = cls.objects.create(book=book, member=member, action_date=action_date,
-                                          barrow_days=barrow_days, action_type=cls.BARROW)
+            instance = cls.objects.create(**kwargs, action_type=cls.BARROW)
             return instance
         return 'book is not available'
 
     @classmethod
-    def holdover_book(cls, book, member, action_date, barrow_days):
-        instance = cls.objects.create(book=book, member=member, action_date=action_date, barrow_days=barrow_days,
-                                      action_type=cls.HOLDOVER)
+    def holdover_book(cls, **kwargs):
+        instance = cls.objects.create(**kwargs, action_type=cls.HOLDOVER)
         return instance
 
     @classmethod
-    def return_book(cls, book, member, action_date):
-        instance = cls.objects.create(book=book, member=member, action_date=action_date, action_type=cls.RETURN)
+    def return_book(cls, **kwargs):
+        instance = cls.objects.create(**kwargs, action_type=cls.RETURN)
         return instance
+
+    @staticmethod
+    def action_switcher(action):
+        if action == 1:
+            return BarrowAction.barrow_book
+        if action == 2:
+            return BarrowAction.return_book
+        if action == 3:
+            return BarrowAction.holdover_book
 
 
 class Author(BaseModel):
