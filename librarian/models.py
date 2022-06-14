@@ -13,7 +13,6 @@ class Book(BaseModel):
     isbn = models.CharField(max_length=50, verbose_name='ISBN', help_text='International Standard Book Number')
     author = models.ForeignKey(to='Author', on_delete=models.SET_NULL, null=True, blank=True)
     publisher = models.ForeignKey(to='Publisher', on_delete=models.SET_NULL, null=True, blank=True)
-    inventory = models.PositiveSmallIntegerField(default=0)
 
     @classmethod
     def get_books_inventory_balance(cls):
@@ -35,7 +34,8 @@ class Book(BaseModel):
         return_count = Count('id',
                              filter=Q(action_type=2))
         book_balance = book.actions.all().aggregate(
-            in_use=Coalesce(barrow_count, 0) - Coalesce(return_count, 0)
+            barrows=Coalesce(barrow_count, 0),
+            returns=Coalesce(return_count, 0)
         )
         return book_balance
 
@@ -62,7 +62,7 @@ class BarrowAction(BaseModel):
     def barrow_book(cls, **kwargs):
         book = kwargs['book']
         book_balance = Book.get_book_balance(book)
-        if book.inventory - book_balance['in_use'] > 0:
+        if book_balance['barrows'] == book_balance['returns']:
             instance = cls.objects.create(**kwargs, action_type=cls.BARROW)
             return instance
         return 'book is not available'

@@ -6,7 +6,7 @@ from .models import Book, BarrowAction
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = ('id', 'name', 'inventory', 'publisher', 'author')
+        fields = ('id', 'name', 'publisher', 'author')
 
 
 class BarrowActionSerializer(serializers.ModelSerializer):
