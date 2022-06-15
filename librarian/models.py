@@ -53,7 +53,7 @@ class BarrowAction(BaseModel):
     action_type = models.SmallIntegerField(
         choices=((BARROW, 'barrow book'), (RETURN, 'return book'), (HOLDOVER, 'holdover book')))
     action_date = models.DateTimeField(default=timezone.now)
-    barrow_days = models.PositiveSmallIntegerField(default=0)
+    barrow_days = models.IntegerField(default=0)
 
     def __str__(self):
         return f'{self.book} >> {self.member}'

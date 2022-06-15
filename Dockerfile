@@ -4,7 +4,7 @@ WORKDIR /code
 
 COPY requirements.txt /code/
 
-RUN pip install -u pip
+RUN pip install -U pip
 
 RUN pip install -r requirements.txt
 
